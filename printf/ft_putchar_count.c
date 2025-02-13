@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putchar_count.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aouaalla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 11:02:31 by aouaalla          #+#    #+#             */
-/*   Updated: 2025/02/13 11:02:39 by aouaalla         ###   ########.fr       */
+/*   Created: 2024/11/19 22:52:44 by aouaalla          #+#    #+#             */
+/*   Updated: 2024/11/20 17:30:16 by aouaalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include "printf/ft_printf.h"
-# include "Libft/libft.h"
-# include <signal.h>
-
-#endif
+void	ft_putchar_count(int *i, char c)
+{
+	write(1, &c, 1);
+	(*i)++;
+}

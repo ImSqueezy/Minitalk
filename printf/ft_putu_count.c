@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putu_count.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aouaalla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 11:02:31 by aouaalla          #+#    #+#             */
-/*   Updated: 2025/02/13 11:02:39 by aouaalla         ###   ########.fr       */
+/*   Created: 2024/11/19 22:54:26 by aouaalla          #+#    #+#             */
+/*   Updated: 2024/11/20 17:31:11 by aouaalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include "printf/ft_printf.h"
-# include "Libft/libft.h"
-# include <signal.h>
+void	ft_putu_count(int *i, unsigned int u)
+{
+	char	a;
 
-#endif
+	if (u <= 9)
+	{
+		a = u + 48;
+		ft_putchar_count(i, a);
+	}
+	else
+	{
+		ft_putu_count(i, u / 10);
+		ft_putu_count(i, u % 10);
+	}
+}

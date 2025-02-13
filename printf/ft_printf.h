@@ -1,20 +1,28 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   printf.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aouaalla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 11:02:31 by aouaalla          #+#    #+#             */
-/*   Updated: 2025/02/13 11:02:39 by aouaalla         ###   ########.fr       */
+/*   Created: 2024/11/19 22:54:51 by aouaalla          #+#    #+#             */
+/*   Updated: 2024/11/20 17:31:44 by aouaalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-# include "printf/ft_printf.h"
-# include "Libft/libft.h"
-# include <signal.h>
+# include <stdarg.h>
+# include <unistd.h>
+
+void	ft_putchar_count(int *i, char c);
+void	ft_putstr_count(int	*i, char *s);
+void	ft_putnbr_count(int	*i, int nbr);
+void	ft_putu_count(int *i, unsigned int u);
+void	ft_puthex_count(int *i, char c, unsigned int u);
+void	ft_putptr_count(int *i, void *p);
+int		ft_printf(const char *str, ...);
 
 #endif

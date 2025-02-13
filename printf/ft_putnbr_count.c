@@ -1,20 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putnbr_count.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aouaalla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 11:02:31 by aouaalla          #+#    #+#             */
-/*   Updated: 2025/02/13 11:02:39 by aouaalla         ###   ########.fr       */
+/*   Created: 2024/11/19 22:53:47 by aouaalla          #+#    #+#             */
+/*   Updated: 2024/11/20 17:30:40 by aouaalla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include "printf/ft_printf.h"
-# include "Libft/libft.h"
-# include <signal.h>
+void	ft_putnbr_count(int	*i, int nbr)
+{
+	char		a;
+	long long	num;
 
-#endif
+	num = nbr;
+	if (num < 0)
+	{
+		ft_putchar_count(i, '-');
+		num *= -1;
+	}
+	if (num >= 0 && num <= 9)
+	{
+		a = num + 48;
+		ft_putchar_count(i, a);
+	}
+	else
+	{
+		ft_putnbr_count(i, num / 10);
+		ft_putnbr_count(i, num % 10);
+	}
+}
