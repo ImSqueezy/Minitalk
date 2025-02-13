@@ -1,0 +1,7 @@
+*.o
+printf/*.o
+printf/libftprintf.a
+client
+server
+/.vscode
+a.out
