@@ -13,8 +13,10 @@
 #ifndef MINITALK_H
 # define MINITALK_H
 
+# define MASK 1
+# include <signal.h>
+# include <unistd.h>
 # include "printf/ft_printf.h"
 # include "Libft/libft.h"
-# include <signal.h>
 
 #endif

@@ -12,11 +12,39 @@
 
 #include "minitalk.h"
 
+void	data_send(int pid, char *message)
+{
+	int		i;
+	int		j;
+	int		bit;
+
+	i = 0;
+	while (message[i])
+	{
+		j = 7;
+		while (j >= 0)
+		{
+			bit = (message[i] >> j) & MASK;
+			if (bit == 0)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			j--;
+		}
+		i++;
+	}
+}
+
 int main(int argc, char **argv)
 {
-	if (argc != 2)
-		return (ft_printf("Invalid number of args!"), 1);
-	if (kill(ft_atoi(argv[1]), SIGUSR1) != 0)
-		return (ft_printf("The pid is not valid!"), 1);
+	char	*message;
+	int		pid;
+	
+	// (void)argc;
+	if (argc != 3)
+		return (ft_printf("Syntax: %s pid message", argv[0]), 1);
+	message = argv[2];
+	pid = ft_atoi(argv[1]);
+	data_send(pid, message);	
 	return (0);
 }
