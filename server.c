@@ -12,34 +12,33 @@
 
 #include "minitalk.h"
 
-void	handler(int sig, siginfo_t *info, void *context)
+void	write_byte(int sig, siginfo_t *s, void *contest)
 {
-	(void)context;
-	(void)info;
+	(void)contest;
+	(void)s;
 	(void)sig;
-	ft_printf("received a signal!\n");
-	if (sig == SIGUSR1)
-		ft_printf("im ISG1");
-	else
-		ft_printf("im SIG2");
+	ft_printf("l\n");
 }
 
-int main()
+void	sa_install(struct sigaction *sa_ptr)
 {
-	int		i;
-	pid_t	pid;
-	struct sigaction sa;
+	pid_t				pid;
 
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sa.sa_sigaction = handler;
-	sigaction(SIGUSR2, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
 	pid = getpid();
-	ft_printf("%d", pid);
+	ft_printf("%d\n", pid);
+	sigemptyset(&sa_ptr->sa_mask);
+	sa_ptr->sa_flags = SA_SIGINFO;
+	sa_ptr->sa_sigaction = write_byte;
+}
 
-	i = 0;
+int	main(void)
+{
+	struct sigaction	sa;
+
+	sa_install(&sa);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-		i++;
+		pause();
 	return (0);
 }

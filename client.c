@@ -12,39 +12,49 @@
 
 #include "minitalk.h"
 
-void	data_send(int pid, char *message)
+int	g_pid;
+
+int	args_check(int ac, char **av)
+{
+	if (ac != 3)
+	{
+		ft_printf("Invalid number of args!\n(Syntax: %s process_id message)\n",
+			av[0]);
+		return (0);
+	}
+	return (1);
+}
+
+void	data_send(unsigned int byte, char *message)
 {
 	int		i;
-	int		j;
-	int		bit;
 
-	i = 0;
-	while (message[i])
+	i = 7;
+	while (i >= 0)
 	{
-		j = 7;
-		while (j >= 0)
+		if ((message[byte] >> i) & MASK)
 		{
-			bit = (message[i] >> j) & MASK;
-			if (bit == 0)
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			j--;
+			if (kill(g_pid, SIGUSR1) != 0)
+				return (ft_printf("The pid is incorrect.\n"), exit(0));
 		}
-		i++;
+		else
+		{
+			if (kill(g_pid, SIGUSR2) != 0)
+				return (ft_printf("The pid is incorrect.\n"), exit(0));
+		}
+		usleep(500);
+		i--;
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	char	*message;
-	int		pid;
-	
-	// (void)argc;
-	if (argc != 3)
-		return (ft_printf("Syntax: %s pid message", argv[0]), 1);
+
+	if (!args_check(argc, argv))
+		return (1);
 	message = argv[2];
-	pid = ft_atoi(argv[1]);
-	data_send(pid, message);	
+	g_pid = ft_atoi(argv[1]);
+	ft_striteri(message, data_send);
 	return (0);
 }
