@@ -28,19 +28,22 @@ int	args_check(int ac, char **av)
 void	data_send(unsigned int byte, char *message)
 {
 	int		i;
+	int		bit; // debut
 
 	i = 7;
 	while (i >= 0)
 	{
-		if ((message[byte] >> i) & MASK)
+		if ((bit = (message[byte] >> i) & MASK))
 		{
 			if (kill(g_pid, SIGUSR1) != 0)
 				return (ft_printf("The pid is incorrect.\n"), exit(0));
+			// ft_printf("%d", bit);
 		}
 		else
 		{
 			if (kill(g_pid, SIGUSR2) != 0)
 				return (ft_printf("The pid is incorrect.\n"), exit(0));
+			// ft_printf("%d", bit);
 		}
 		usleep(500);
 		i--;

@@ -12,12 +12,35 @@
 
 #include "minitalk.h"
 
+void	print_bits(unsigned char octet) // debug
+{
+	int				i;
+	unsigned char	bit;
+
+	i = 8;
+	while (i--)
+	{
+		bit = (octet >> i & 1) + '0';
+		write(1, &bit, 1);
+	}
+}
+
 void	write_byte(int sig, siginfo_t *s, void *contest)
 {
-	(void)contest;
 	(void)s;
-	(void)sig;
-	ft_printf("l\n");
+	(void)contest;
+	static int	bit = 7;
+	static char	c = 0;
+
+	if (sig == SIGUSR1)
+		c |= (1 << bit);
+	bit--;
+	if (bit == 0)
+	{
+		write(1, &c, 1);
+		bit = 7;
+		c = 0;
+	}
 }
 
 void	sa_install(struct sigaction *sa_ptr)
