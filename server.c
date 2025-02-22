@@ -12,38 +12,30 @@
 
 #include "minitalk.h"
 
-void	print_bits(unsigned char octet) // debug
-{
-	int				i;
-	unsigned char	bit;
-
-	i = 8;
-	while (i--)
-	{
-		bit = (octet >> i & 1) + '0';
-		write(1, &bit, 1);
-	}
-}
+int	last_pid;
 
 void	write_byte(int sig, siginfo_t *s, void *contest)
 {
-	(void)s;
 	(void)contest;
 	static int	bit = 7;
-	static char	c = 0;
+	static char	octet = 0;
 
+	if (s->si_pid != last_pid)
+	{
+		bit = 7;
+		octet = 0;
+	}
+	last_pid = s->si_pid;
 	if (sig == SIGUSR1)
-		c |= 1 << bit;
+		octet |= 1 << bit;
 	bit--;
 	if (bit == -1)
 	{
-		write(1, &c, 1);
+		write(1, &octet, 1);
 		bit = 7;
-		print_bits(c);
-		ft_printf("\n");
-		c = 0;
-		// kill(s->si_pid, SIGUSR1);
+		octet = 0;
 	}
+	kill(s->si_pid, SIGUSR1);
 }
 
 void	sa_install(struct sigaction *sa_ptr)
