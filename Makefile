@@ -1,8 +1,10 @@
 NAME = client server
 
+NAME_BONUS = client_bonus server_bonus
+
 OBJS = client.o server.o
 
-CC = cc
+B_OBJS = client_bonus.o server_bonus.o
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -15,29 +17,31 @@ LIBFT_OBJS = $(addprefix Libft/, ft_isalpha.o ft_isdigit.o ft_isalnum.o ft_isasc
         ft_memchr.o ft_memcmp.o ft_strnstr.o ft_atoi.o ft_strdup.o ft_calloc.o ft_substr.o ft_substr.o ft_strjoin.o ft_strtrim.o \
         ft_split.o ft_itoa.o ft_strmapi.o ft_striteri.o ft_putchar_fd.o ft_putstr_fd.o ft_putendl_fd.o ft_putnbr_fd.o) 
 
-LIBFT_PRINTF_OBJ = $(addprefix printf/, ft_putchar_count.o ft_puthex_count.o ft_putnbr_count.o \
+LIBFT_PRINTF_OBJS = $(addprefix printf/, ft_putchar_count.o ft_puthex_count.o ft_putnbr_count.o \
 	ft_putptr_count.o ft_putstr_count.o ft_putu_count.o ft_printf.o)
 
 all: $(LIBFT_PRINTF_LIB) $(LIBFT) $(NAME)
 
+bonus: $(LIBFT_PRINTF_LIB) $(LIBFT) $(NAME_BONUS)
+
 $(LIBFT): $(LIBFT_OBJS)
 	make -C Libft/
 
-$(LIBFT_PRINTF_LIB): $(LIBFT_PRINTF_OBJ)
+$(LIBFT_PRINTF_LIB): $(LIBFT_PRINTF_OBJS)
 	make -C printf/
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) minitalk.h
 	cc $(CFLAGS) client.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o client
 	cc $(CFLAGS) server.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o server
 
+$(NAME_BONUS): $(B_OBJS) minitalk_bonus.h
+	cc $(CFLAGS) client_bonus.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o client_bonus
+	cc $(CFLAGS) server_bonus.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o server_bonus
+
 clean:
-	rm -f $(OBJS)
-	make clean -C printf/
-	make clean -C Libft/
+	@rm -f $(OBJS) $(LIBFT_PRINTF_OBJ) $(LIBFT_OBJS) $(B_OBJ)
 
 fclean: clean
-	rm -f $(NAME)
-	make fclean -C printf/
-	make fclean -C Libft/
+	@rm -f $(NAME) $(LIBFT) $(LIBFT_PRINTF_LIB) $(NAME_BONUS)
 
 re: fclean all
