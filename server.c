@@ -33,13 +33,16 @@ void	write_byte(int sig, siginfo_t *s, void *contest)
 	static char	c = 0;
 
 	if (sig == SIGUSR1)
-		c |= (1 << bit);
+		c |= 1 << bit;
 	bit--;
-	if (bit == 0)
+	if (bit == -1)
 	{
 		write(1, &c, 1);
 		bit = 7;
+		print_bits(c);
+		ft_printf("\n");
 		c = 0;
+		// kill(s->si_pid, SIGUSR1);
 	}
 }
 

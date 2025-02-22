@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-int	g_pid;
+// static int	g_flag;
 
 int	args_check(int ac, char **av)
 {
@@ -25,39 +24,58 @@ int	args_check(int ac, char **av)
 	return (1);
 }
 
-void	data_send(unsigned int byte, char *message)
+void	data_send(int pid, unsigned int byte, char *message)
 {
 	int		i;
-	int		bit; // debut
+	int		bit;
 
+	// g_flag = 1;
 	i = 7;
 	while (i >= 0)
 	{
 		if ((bit = (message[byte] >> i) & MASK))
 		{
-			if (kill(g_pid, SIGUSR1) != 0)
+			if (kill(pid, SIGUSR1) != 0)
 				return (ft_printf("The pid is incorrect.\n"), exit(0));
-			// ft_printf("%d", bit);
+			ft_printf("%d", bit);
 		}
 		else
 		{
-			if (kill(g_pid, SIGUSR2) != 0)
+			if (kill(pid, SIGUSR2) != 0)
 				return (ft_printf("The pid is incorrect.\n"), exit(0));
-			// ft_printf("%d", bit);
+			ft_printf("%d", bit);
 		}
-		usleep(500);
+		usleep(100);
 		i--;
 	}
+	ft_printf("\n");
 }
+
+// void notifier(int sig)
+// {
+// 	if (sig == SIGUSR1)
+// 		g_flag = 0;
+// }
 
 int	main(int argc, char **argv)
 {
-	char	*message;
+	int					pid;
+	char				*message;
+	unsigned int		byte;
+	// struct sigaction	ts;
 
 	if (!args_check(argc, argv))
 		return (1);
+	// ts.sa_flags = 0;
+	// ts.sa_handler = notifier;
+	// sigaction(SIGUSR1, &ts, NULL);
 	message = argv[2];
-	g_pid = ft_atoi(argv[1]);
-	ft_striteri(message, data_send);
+	pid = ft_atoi(argv[1]);
+	byte = 0;
+	while (message[byte])
+	{
+		data_send(pid, byte, message);
+		byte++;
+	}
 	return (0);
 }
