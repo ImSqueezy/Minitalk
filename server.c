@@ -12,20 +12,20 @@
 
 #include "minitalk.h"
 
-int	last_pid;
+int	g_last_pid;
 
 void	write_byte(int sig, siginfo_t *s, void *contest)
 {
-	(void)contest;
 	static int	bit = 7;
 	static char	octet = 0;
 
-	if (s->si_pid != last_pid)
+	(void)contest;
+	if (s->si_pid != g_last_pid)
 	{
 		bit = 7;
 		octet = 0;
 	}
-	last_pid = s->si_pid;
+	g_last_pid = s->si_pid;
 	if (sig == SIGUSR1)
 		octet |= 1 << bit;
 	bit--;

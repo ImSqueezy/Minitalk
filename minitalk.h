@@ -14,9 +14,22 @@
 # define MINITALK_H
 
 # define MASK 1
+# define PID_ERROR "Error: No such process with the following ID\n"
+# define NEGATIVE_PID_ERROR "Error: The pid can not be negative!\n\
+(This error might occur in case of an overflow or\
+a negative pid was enterance)\n" 
+# define EMPTY_ARG "Invalid Arg: Empty strings can not be processed!\n"
+# define INVALID_ARGS_N "Error: Invalid number of args!\n\
+(Syntax: %s process_id message)\n"
 # include <signal.h>
 # include <unistd.h>
 # include "printf/ft_printf.h"
 # include "Libft/libft.h"
+
+typedef struct s_cinfo
+{
+	int	flag;
+	int	pid;
+}	t_cinfo;
 
 #endif

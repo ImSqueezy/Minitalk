@@ -12,67 +12,65 @@
 
 #include "minitalk.h"
 
-int	g_flag;
+t_cinfo	g_info;
 
 int	args_check(int ac, char **av)
 {
 	if (ac != 3)
-	{
-		ft_printf("Invalid number of args!\n(Syntax: %s process_id message)\n",
-			av[0]);
-		return (0);
-	}
+		return (ft_printf("%s", INVALID_ARGS_N), 0);
+	if (!*av[1] || !*av[2])
+		return (ft_printf("%s", EMPTY_ARG), 0);
+	ft_memset(&g_info, 0, sizeof(t_cinfo));
+	g_info.pid = ft_atoi(av[1]);
+	if (g_info.pid < 0)
+		return (ft_printf("%s", NEGATIVE_PID_ERROR), 0);
+	else if (g_info.pid == 0)
+		return (ft_printf("%s", PID_ERROR), 0);
 	return (1);
 }
 
-void	data_send(int pid, unsigned int byte, char *message)
+void	data_sender(unsigned int byte, char *message)
 {
 	int		i;
 
 	i = 7;
 	while (i >= 0)
 	{
-		while (g_flag)
-			usleep(1);
-		g_flag = 1;
 		if ((message[byte] >> i) & MASK)
 		{
-			if (kill(pid, SIGUSR1) != 0)
-				return (ft_printf("The pid is incorrect!\n"), exit(0));
+			if (kill(g_info.pid, SIGUSR1) != 0)
+				return (ft_printf("%s", PID_ERROR), exit(0));
 		}
 		else
 		{
-			if (kill(pid, SIGUSR2) != 0)
-				return (ft_printf("The pid is incorrect!\n"), exit(0));
+			if (kill(g_info.pid, SIGUSR2) != 0)
+				return (ft_printf("%s", PID_ERROR), exit(0));
 		}
 		i--;
+		while (g_info.flag)
+			usleep(5);
+		g_info.flag = 1;
 	}
 }
 
-void notifier(int sig)
+void	notifier(int sig)
 {
 	if (sig == SIGUSR1)
-		g_flag = 0;
+		g_info.flag = 0;
 }
 
 int	main(int argc, char **argv)
 {
-	int					pid;
 	char				*message;
 	unsigned int		byte;
-	struct sigaction	ts;
 
 	if (!args_check(argc, argv))
 		return (1);
-	ts.sa_flags = 0;
-	ts.sa_handler = notifier;
-	sigaction(SIGUSR1, &ts, NULL);
+	signal(SIGUSR1, notifier);
+	signal(SIGUSR2, notifier);
 	message = argv[2];
-	pid = ft_atoi(argv[1]);
-	if (pid <= 0)
-		return (ft_printf("The pid is incorrect!\n"));
 	byte = -1;
 	while (message[++byte])
-		data_send(pid, byte, message);
+		data_sender(byte, message);
 	return (0);
 }
