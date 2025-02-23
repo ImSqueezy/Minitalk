@@ -1,6 +1,5 @@
 *.o
-printf/*.o
-printf/libftprintf.a
+*.a
 client
 server
 /.vscode
