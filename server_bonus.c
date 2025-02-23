@@ -14,55 +14,35 @@
 
 t_info	g_info;
 
-void	expected_bytes(unsigned char octet)
-{
-	if ((octet & 0x80) == 0)
-		g_info.byte_sequence = 1;
-	if ((octet & 0xE0) == 0xC0)
-		g_info.byte_sequence = 2;
-	if ((octet & 0xF0) == 0xE0)
-		g_info.byte_sequence = 3;
-	if ((octet & 0xF8) == 0xF0)
-		g_info.byte_sequence = 4;
-}
-
-void	byte_writer(void)
-{
-	write(1, &g_info.bytes, g_info.byte_sequence);
-	ft_memset(&g_info, 0, sizeof(t_info) - sizeof(int));
-}
-
-void	data_receiver(int sig, siginfo_t *s, void *contest)
+void	data_receiver(int sig, siginfo_t *ptr, void *contest)
 {
 	(void)contest;
-	if (s->si_pid != g_info.last_pid)
-	{
-		ft_memset(&g_info, 0, sizeof(t_info));
-		g_info.current_bit = 7;
-		g_info.last_pid = s->si_pid;
-	}
+	pid_checker(ptr, &g_info);
 	if (sig == SIGUSR1)
 		g_info.octet |= 1 << g_info.current_bit;
 	g_info.current_bit--;
 	if (g_info.current_bit == -1)
 	{
-		if (g_info.octet == '\0')
-			return (kill(s->si_pid, SIGUSR2), exit(0));
+		if (g_info.octet == 0)
+		{
+			kill(ptr->si_pid, SIGUSR2);
+			return ;
+		}
 		if (g_info.current_byte == 0)
-			expected_bytes(g_info.octet);
+			expected_bytes(&g_info);
 		g_info.bytes[g_info.current_byte] = g_info.octet;
 		g_info.current_byte++;
 		if (g_info.current_byte == g_info.byte_sequence)
-			byte_writer();
+			byte_writer(&g_info);
 		g_info.octet = 0;
 		g_info.current_bit = 7;
 	}
-	kill(s->si_pid, SIGUSR1);
+	kill(ptr->si_pid, SIGUSR1);
 }
 
 void	sa_install(struct sigaction *sa_ptr)
 {
-	pid_t				pid;
+	pid_t	pid;
 
 	pid = getpid();
 	ft_printf("%d\n", pid);

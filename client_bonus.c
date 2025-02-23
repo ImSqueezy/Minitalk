@@ -20,7 +20,7 @@ int	args_check(int ac, char **av)
 		return (ft_printf("%s", INVALID_ARGS_N), 0);
 	if (!*av[1] || !*av[2])
 		return (ft_printf("%s", EMPTY_ARG), 0);
-	ft_memset(&g_info, 0, sizeof(t_cinfo));
+	g_info.flag = 1;
 	g_info.pid = ft_atoi(av[1]);
 	if (g_info.pid < 0)
 		return (ft_printf("%s", NEGATIVE_PID_ERROR), 0);
@@ -29,14 +29,14 @@ int	args_check(int ac, char **av)
 	return (1);
 }
 
-void	data_sender(unsigned int byte, char *message)
+void	data_sender(char octet)
 {
 	int		i;
 
 	i = 7;
 	while (i >= 0)
 	{
-		if ((message[byte] >> i) & MASK)
+		if ((octet >> i) & MASK)
 		{
 			if (kill(g_info.pid, SIGUSR1) != 0)
 				return (ft_printf("%s", PID_ERROR), exit(0));
@@ -58,7 +58,10 @@ void	notifier(int sig)
 	if (sig == SIGUSR1)
 		g_info.flag = 0;
 	else if (sig == SIGUSR2)
-		ft_printf("MESSAGE HAS BEEN RECEIVED!");
+	{
+		ft_printf("%s", ACKNOWLEDGEMENT_MESSAGE);
+		exit(0);
+	}
 }
 
 int	main(int argc, char **argv)
@@ -73,6 +76,7 @@ int	main(int argc, char **argv)
 	message = argv[2];
 	byte = -1;
 	while (message[++byte])
-		data_sender(byte, message);
+		data_sender(message[byte]);
+	data_sender('\0');
 	return (0);
 }

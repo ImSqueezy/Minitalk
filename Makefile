@@ -4,7 +4,9 @@ NAME_BONUS = client_bonus server_bonus
 
 OBJS = client.o server.o
 
-B_OBJS = client_bonus.o server_bonus.o
+LIBFT_HEADERS = Libft/libft.h printf/ft_printf.h
+
+B_OBJS = client_bonus.o server_bonus.o server_utils_bonus.o
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -30,16 +32,16 @@ $(LIBFT): $(LIBFT_OBJS)
 $(LIBFT_PRINTF_LIB): $(LIBFT_PRINTF_OBJS)
 	make -C printf/
 
-$(NAME): $(OBJS) minitalk.h
+$(NAME): $(OBJS) $(LIBFT_HEADERS) minitalk.h
 	cc $(CFLAGS) client.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o client
 	cc $(CFLAGS) server.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o server
 
-$(NAME_BONUS): $(B_OBJS) minitalk_bonus.h
+$(NAME_BONUS): $(B_OBJS) $(LIBFT_HEADERS) minitalk_bonus.h
 	cc $(CFLAGS) client_bonus.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o client_bonus
-	cc $(CFLAGS) server_bonus.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o server_bonus
+	cc $(CFLAGS) server_bonus.o server_utils_bonus.o $(LIBFT) $(LIBFT_PRINTF_LIB) -o server_bonus
 
 clean:
-	@rm -f $(OBJS) $(LIBFT_PRINTF_OBJ) $(LIBFT_OBJS) $(B_OBJ)
+	@rm -f $(OBJS) $(LIBFT_PRINTF_OBJS) $(LIBFT_OBJS) $(B_OBJS)
 
 fclean: clean
 	@rm -f $(NAME) $(LIBFT) $(LIBFT_PRINTF_LIB) $(NAME_BONUS)
