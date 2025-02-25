@@ -16,6 +16,8 @@ t_cinfo	g_info;
 
 int	args_check(int ac, char **av)
 {
+	int	i;
+
 	if (ac != 3)
 		return (ft_printf("%s", INVALID_ARGS_N), 0);
 	if (!*av[1] || !*av[2])
@@ -26,6 +28,12 @@ int	args_check(int ac, char **av)
 		return (ft_printf("%s", NEGATIVE_PID_ERROR), 0);
 	else if (g_info.pid == 0)
 		return (ft_printf("%s", PID_ERROR), 0);
+	while (av[1][i])
+	{
+		if (!ft_isdigit(av[1][i]))
+			return (ft_printf("%s", PID_ERROR1), 0);
+		i++;
+	}
 	return (1);
 }
 
@@ -48,7 +56,7 @@ void	data_sender(unsigned int byte, char *message)
 		}
 		i--;
 		while (g_info.flag)
-			usleep(5);
+			usleep(1);
 		g_info.flag = 1;
 	}
 }

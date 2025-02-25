@@ -24,8 +24,8 @@ void	write_byte(int sig, siginfo_t *s, void *contest)
 	{
 		bit = 7;
 		octet = 0;
+		g_last_pid = s->si_pid;
 	}
-	g_last_pid = s->si_pid;
 	if (sig == SIGUSR1)
 		octet |= 1 << bit;
 	bit--;
