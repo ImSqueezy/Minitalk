@@ -1,6 +1,0 @@
-*.o
-*.a
-client
-server
-/.vscode
-a.out
