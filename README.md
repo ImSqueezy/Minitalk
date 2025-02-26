@@ -1,5 +1,5 @@
 # Walktrough
-This project is Documented in Medium, you can (read about it)[https://medium.com/@ouaallaabdelali1/minitalk-0ed1768bb5fb] in 9 minutes.
+This project is Documented in Medium, you can [read about it](https://medium.com/@ouaallaabdelali1/minitalk-0ed1768bb5fb]) in 9 minutes.
 
 ## General idea
 Minitalk is about a acheiving a mini Communication between two processes. There will be a process waiting for a messages and other just sends what ever message is passed alongside the arguments.
