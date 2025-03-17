@@ -43,9 +43,9 @@ void	data_sender(char octet)
 	int		i;
 
 	i = 7;
-	g_info.flag = 1;
 	while (i >= 0)
 	{
+		g_info.flag = 1;
 		if ((octet >> i) & MASK)
 		{
 			if (kill(g_info.pid, SIGUSR1) != 0)
@@ -59,7 +59,6 @@ void	data_sender(char octet)
 		i--;
 		while (g_info.flag)
 			usleep(1);
-		g_info.flag = 1;
 	}
 }
 
