@@ -43,6 +43,7 @@ void	data_sender(char octet)
 	int		i;
 
 	i = 7;
+	g_info.flag = 1;
 	while (i >= 0)
 	{
 		if ((octet >> i) & MASK)

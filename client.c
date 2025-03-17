@@ -18,6 +18,7 @@ int	args_check(int ac, char **av)
 {
 	int	i;
 
+	i = 0;
 	if (ac != 3)
 		return (ft_printf("%s", INVALID_ARGS_N), 0);
 	if (!*av[1] || !*av[2])
@@ -42,6 +43,7 @@ void	data_sender(unsigned int byte, char *message)
 	int		i;
 
 	i = 7;
+	g_info.flag = 1;
 	while (i >= 0)
 	{
 		if ((message[byte] >> i) & MASK)

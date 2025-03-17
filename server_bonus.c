@@ -46,7 +46,6 @@ void	sa_install(struct sigaction *sa_ptr)
 
 	pid = getpid();
 	ft_printf("%d\n", pid);
-	sigemptyset(&sa_ptr->sa_mask);
 	sa_ptr->sa_flags = SA_SIGINFO;
 	sa_ptr->sa_sigaction = data_receiver;
 }
