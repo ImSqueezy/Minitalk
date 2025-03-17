@@ -43,9 +43,9 @@ void	data_sender(unsigned int byte, char *message)
 	int		i;
 
 	i = 7;
-	g_info.flag = 1;
 	while (i >= 0)
 	{
+		g_info.flag = 1;
 		if ((message[byte] >> i) & MASK)
 		{
 			if (kill(g_info.pid, SIGUSR1) != 0)
@@ -59,7 +59,6 @@ void	data_sender(unsigned int byte, char *message)
 		i--;
 		while (g_info.flag)
 			usleep(1);
-		g_info.flag = 1;
 	}
 }
 
